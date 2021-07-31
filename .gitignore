@@ -7,3 +7,12 @@ env
 venv
 .pytest_cache/
 .DS_Store
+
+# vim
+Session.vim
+*.swo
+*.swp
+*.swn
+
+# ctags
+tags
