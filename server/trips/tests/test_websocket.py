@@ -6,8 +6,8 @@ from channels.layers import get_channel_layer
 from channels.db import database_sync_to_async
 from rest_framework_simplejwt.tokens import AccessToken
 
-
 from taxi.routing import application
+from trips.models import Trip
 
 
 TEST_CHANNEL_LAYERS = {
@@ -31,6 +31,18 @@ def create_user(username, password, group='rider'):
     # Create access token.
     access = AccessToken.for_user(user)     # TODO check with pdb
     return user, access
+
+
+@database_sync_to_async
+def create_trip(pick_up_address='123 Main Street', drop_off_address='456 Piney Road',
+                status='REQUESTED', rider=None, driver=None):
+    return Trip.objects.create(
+        pick_up_address=pick_up_address,
+        drop_off_address=drop_off_address,
+        status=status,
+        rider=rider,
+        driver=driver
+    )
 
 
 @pytest.mark.asyncio
@@ -162,4 +174,62 @@ class TestWebSocket:
         assert response_data['rider']['username'] == user.username
         assert response_data['driver'] is None
 
+        await communicator.disconnect()
+
+    async def test_create_trip_group(self, settings):
+        settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
+        user, access = await create_user(
+            'test.user@example.com', 'pAssw0rd', 'rider'
+        )
+        communicator = WebsocketCommunicator(
+            application=application,
+            path=f'/taxi/?token={access}'
+        )
+        connected, _ = await communicator.connect()
+
+        # Send a ride request.
+        await communicator.send_json_to({
+            'type': 'create.trip',
+            'data': {
+                'pick_up_address': '123 Main Street',
+                'drop_off_address': '456 Piney Road',
+                'rider': user.id,
+            },
+        })
+        response = await communicator.receive_json_from()
+        response_data = response.get('data')    # TODO check with pdb what is in response_data
+
+        # Send a message to the trip group.
+        message = {
+            'type': 'echo.message',
+            'data': 'Thisis a test message.',
+        }
+        channel_layer = get_channel_layer()
+        await channel_layer.group_send(response_data['id'], message=message)
+        # Rider receives message.
+        response = await communicator.receive_json_from()   # TODO check what is in response
+        assert response == message
+        await communicator.disconnect()
+
+    async def test_join_trip_group_on_connect(self, settings):
+        settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
+        user, access = await create_user(
+            'test.user@example.com', 'pAssw0rd', 'rider'
+        )
+        trip = await create_trip(rider=user)
+        communicator = WebsocketCommunicator(
+            application=application,
+            path=f'/taxi/?token={access}'
+        )
+        connected, _ = await communicator.connect()
+        # Send a message to the trip group.
+        message = {
+            'type': 'echo.message',
+            'data': 'This is a test message.',
+        }
+        channel_layer = get_channel_layer()
+        await channel_layer.group_send(f'{trip.id}', message=message)
+        # Rdier receives message.
+        response = await communicator.receive_json_from()
+        assert response == message
         await communicator.disconnect()
