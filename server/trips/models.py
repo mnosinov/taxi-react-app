@@ -7,7 +7,10 @@ from django.conf import settings
 
 
 class User(AbstractUser):
-    pass
+    @property
+    def group(self):
+        groups = self.groups.all()
+        return groups[0].name if groups else None
 
 
 class Trip(models.Model):
@@ -50,8 +53,4 @@ class Trip(models.Model):
 
     def get_absolute_url(self):
         return reverse('trip:trip_detail', kwargs={'trip_id': self.id})
-
-
-
-    
 
