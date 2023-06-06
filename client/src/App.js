@@ -1,10 +1,25 @@
 import React from 'react';
 import { Container, Navbar }  from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Route, Routes } from 'react-router-dom';
+import Landing from './components/Landing.js';
+import LogIn from './components/LogIn.js';
+import SignUp from './components/SignUp.js';
 import './App.css';
 
 function App() {
+	return (
+		<Routes>
+			<Route path='/' element={<Layout/>}>
+				<Route index element={<Landing/>} />
+				<Route path='sign-up' element={<SignUp/>} />
+				<Route path='log-in' element={<LogIn/>} />
+			</Route>
+		</Routes>
+	);
+}
+
+function Layout () {
   return (
 		<>
 			<Navbar bg='light' expand='lg' variant='light'>

@@ -1,12 +1,9 @@
 import 'bootswatch/dist/lumen/bootstrap.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import './index.css';
 import App from './App';
-import Landing from './components/Landing.js';
-import LogIn from './components/LogIn.js';
-import SignUp from './components/SignUp.js';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -14,13 +11,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
 		<HashRouter>
-			<Routes>
-				<Route path='/' element={<App/>}>
-					<Route index element={<Landing/>} />
-					<Route path='sign-up' element={<SignUp/>} />
-					<Route path='log-in' element={<LogIn/>} />
-				</Route>
-			</Routes>
+			<App />
 		</HashRouter>
   </React.StrictMode>
 );
