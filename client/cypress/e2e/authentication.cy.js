@@ -24,6 +24,17 @@ describe('Authentication', function () {
 	});
 
 	it('Can sign up.', function () {
+		cy.intercept('POST', 'sign_up', {
+			statusCode: 201,
+			body: {
+				id: 1,
+				username: 'gary.cole@example.com',
+				first_name: 'Gary',
+				last_name: 'Cole',
+				group: 'driver',
+				photo: '/media/images/photo.jpg'
+			}
+		}).as('signUp');
 		cy.visit('/#/sign-up');
 		cy.get('input#username').type('gary.cole@example.com');
 		cy.get('input#firstName').type('Gary');
@@ -32,6 +43,7 @@ describe('Authentication', function () {
 		cy.get('select#group').select('driver');
 		cy.get('input#photo').attachFile('images/photo.jpg');
 		cy.get('button').contains('Sign up').click();
+		cy.wait('@signUp');
 		cy.hash().should('eq', '#/log-in');
 	});
 
@@ -83,5 +95,29 @@ describe('Authentication', function () {
 			expect(window.localStorage.getItem('taxi.auth')).to.be.null;
 		});
 		cy.get('[data-cy="logOut"]').should('not.exist');
+	});
+
+	it('Show invalid fields on sign up error.', function () {
+		cy.intercept('POST', 'sign_up', {
+			statusCode: 400,
+			body: {
+				username: [
+					'A user with that username already exists.'
+				]
+			}
+		}).as('signUp');
+		cy.visit('#/sign-up');
+		cy.get('input#username').type('gary.cole@example.com');
+		cy.get('input#firstName').type('Gary');
+		cy.get('input#lastName').type('Cole');
+		cy.get('input#password').type('pAssw0rd', { log: false });
+		cy.get('select#group').select('driver');
+		cy.get('input#photo').attachFile('images/photo.jpg');
+		cy.get('button').contains('Sign up').click();
+		cy.wait('@signUp');
+		cy.get('div.invalid-feedback').contains(
+			'A user with that username already exists'
+		);
+		cy.hash().should('eq', '#/sign-up');
 	});
 });
