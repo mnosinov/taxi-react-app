@@ -22,14 +22,21 @@ function App() {
 				'taxi.auth', JSON.stringify(response.data)
 			);
 			setLoggedIn(true);
+			return { response, isError: false }
 		} catch (error) {
 			console.error(error);
+			return { response: error, isError: true }
 		}
+	};
+
+	const logOut = () => {
+		window.localStorage.removeItem('taxi.auth');
+		setLoggedIn(false);
 	};
 
 	return (
 		<Routes>
-			<Route path='/' element={<Layout isLoggedIn={isLoggedIn} />}>
+			<Route path='/' element={<Layout isLoggedIn={isLoggedIn} logOut={logOut} />}>
 				<Route index element={<Landing isLoggedIn={isLoggedIn} />} />
 				<Route path='sign-up' element={
 						<SignUp isLoggedIn={isLoggedIn} />
@@ -47,7 +54,7 @@ function App() {
 	);
 }
 
-function Layout ({ isLoggedIn }) {
+function Layout ({ isLoggedIn, logOut }) {
   return (
 		<>
 			<Navbar bg='light' expand='lg' variant='light'>
@@ -60,7 +67,11 @@ function Layout ({ isLoggedIn }) {
 						{
 							isLoggedIn && (
 								<Form>
-									<Button type='button'>Log out</Button>
+									<Button type='button' data-cy='logOut'
+										onClick={() => logOut()}
+									>
+										Log out
+									</Button>
 								</Form>
 							)
 						}
