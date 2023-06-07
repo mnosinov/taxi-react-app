@@ -7,6 +7,10 @@ function SignUp (props) {
 	const [isSubmitted, setSubmitted] = useState(false);
 	const onSubmit = (values, actions) => setSubmitted(true);
 
+	if (props.isLoggedIn) {
+		return <Navigate to='/log-in' />;
+	}
+
 	if (isSubmitted) {
 		return <Navigate to='/log-in' />;
 	}

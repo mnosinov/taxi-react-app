@@ -8,8 +8,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-axios.default.xsrfCookieName = 'csrftoken';
-axios.default.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
