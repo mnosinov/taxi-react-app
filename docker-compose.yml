@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+
+  taxi-server:
+    container_name: taxi-server
+    build:
+      context: ./server
+    depends_on:
+      - taxi-redis
+      - taxi-database
+    environment:
+      - PGDATABASE=taxi
+      - PGUSER=taxi
+      - PGPASSWORD=taxi
+      - PGHOST=taxi-database
+      - REDIS_URL=redis://taxi-redis:6380/0
+    ports:
+      - 8003:8000
+    command: python manage.py runserver 0.0.0.0:8000
+
+  taxi-redis:
+    container_name: taxi-redis
+    image: redis:7-alpine
+
+  taxi-database:
+    container_name: taxi-database
+    image: postgres:15-alpine
+    volumes:
+      - taxi-database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=taxi
+      - POSTGRES_PASSWORD=taxi
+    expose:
+      - 5432
+
+  taxi-client:
+    container_name: taxi-client
+    build:
+      context: ./client
+    depends_on:
+      - taxi-server
+    ports:
+      - 3001:3000
+    stdin_open: true
+    command: yarn start
+
+volumes:
+  taxi-database:
