@@ -10,7 +10,7 @@ services:
       - taxi-redis
       - taxi-database
     volumes:
-    - ./server:/usr/src/app
+      - ./server:/usr/src/app
     environment:
       - PGDATABASE=taxi
       - PGUSER=taxi
@@ -46,6 +46,7 @@ services:
       - ./client:/usr/src/app
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_BASE_URL=http://localhost:8003
     ports:
       - 3001:3000
     stdin_open: true
