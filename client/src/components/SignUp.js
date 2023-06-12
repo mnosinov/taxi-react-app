@@ -12,8 +12,8 @@ function SignUp (props) {
 		formData.append('username', values.username);
 		formData.append('first_name', values.firstName);
 		formData.append('last_name', values.lastName);
-		formData.append('passowrd1', values.password);
-		formData.append('passowrd2', values.password);
+		formData.append('password1', values.password);
+		formData.append('password2', values.password);
 		formData.append('group', values.group);
 		formData.append('photo', values.photo);
 		try {
@@ -28,7 +28,7 @@ function SignUp (props) {
 	};
 
 	if (props.isLoggedIn) {
-		return <Navigate to='/log-in' />;
+		return <Navigate to='/' />;
 	}
 
 	if (isSubmitted) {
