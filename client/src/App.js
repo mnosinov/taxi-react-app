@@ -7,6 +7,8 @@ import axios from 'axios';
 import Landing from './components/Landing.js';
 import LogIn from './components/LogIn.js';
 import SignUp from './components/SignUp.js';
+import Driver from './components/Driver.js';
+import Rider from './components/Rider.js';
 
 import './App.css';
 
@@ -47,6 +49,14 @@ function App() {
 							logIn={logIn}
 							isLoggedIn={isLoggedIn}
 						/>
+					}
+				/>
+				<Route path='rider' element={
+						<Rider />
+					}
+				/>
+				<Route path='driver' element={
+						<Driver />
 					}
 				/>
 			</Route>
