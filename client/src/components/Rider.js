@@ -1,10 +1,12 @@
 import React from 'react';
 import { Breadcrumb, Card } from 'react-bootstrap';
 import { Navigate } from 'react-router-dom';
+
 import { isRider } from '../services/AuthService.js';
 
 function Rider (props) {
-	if(!isRider()) {
+
+	if (!isRider()) {
 		return <Navigate to='/' />;
 	}
 
@@ -16,15 +18,11 @@ function Rider (props) {
 			</Breadcrumb>
 			<Card className='mb-3'>
 				<Card.Header>Current Trip</Card.Header>
-				<Card.Body>
-					No trips.
-				</Card.Body>
+				<Card.Body>No Trips.</Card.Body>
 			</Card>
 			<Card className='mb-3'>
 				<Card.Header>Recent Trips</Card.Header>
-				<Card.Body>
-					No trips.
-				</Card.Body>
+				<Card.Body>No Trips.</Card.Body>
 			</Card>
 		</>
 	);
