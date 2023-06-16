@@ -1,7 +1,15 @@
 import React from 'react';
 import { Breadcrumb, Card } from 'react-bootstrap';
+import { Navigate } from 'react-router-dom';
+
+import { isDriver } from '../services/AuthService.js';
 
 function Driver (props) {
+
+	if (!isDriver()) {
+		return <Navigate to='/' />;
+	}
+
 	return (
 		<>
 			<Breadcrumb>
