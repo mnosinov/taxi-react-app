@@ -51,6 +51,12 @@ function Driver (props) {
 			</Breadcrumb>
 
 			<TripCard 
+				title='Current Trips'
+				trips={getCurrentTrips()}
+				group='driver'
+				otherGroup='rider'
+			/>
+			<TripCard 
 				title='Requested Trips'
 				trips={getRequestedTrips()}
 				group='driver'

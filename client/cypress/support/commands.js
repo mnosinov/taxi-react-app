@@ -46,7 +46,7 @@ const logIn = (email) => {
 	cy.get('input#password').type('pAssw0rd', { log: false });
 	cy.get('button').contains('Log in').click();
 	cy.wait('@logIn');
-	cy.wait(200);	// wait ofr 200 milliseconds to save jwt token to localstorage
+	cy.wait(200);	// wait for 200 milliseconds to save jwt token to localstorage
 };
 
 Cypress.Commands.add('addUser', addUser);
