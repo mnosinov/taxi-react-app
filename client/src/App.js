@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Container, Navbar, Button, Form }  from 'react-bootstrap';
+import { Container, Nav, Navbar, Button, Form }  from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Link, Outlet, Route, Routes } from 'react-router-dom';
 import axios from 'axios';
 
 import Landing from './components/Landing.js';
@@ -13,6 +13,8 @@ import DriverDashboard from './components/DriverDashboard.js'
 import DriverDetail from './components/DriverDetail.js'
 import RiderDashboard from './components/RiderDashboard.js'
 import RiderDetail from './components/RiderDetail.js'
+import RiderRequest from './components/RiderRequest.js';
+import { isRider } from './services/AuthService.js';
 
 import './App.css';
 
@@ -44,19 +46,11 @@ function App() {
 		<Routes>
 			<Route path='/' element={<Layout isLoggedIn={isLoggedIn} logOut={logOut} />}>
 				<Route index element={<Landing isLoggedIn={isLoggedIn} />} />
-				<Route path='sign-up' element={
-						<SignUp isLoggedIn={isLoggedIn} />
-					} 
-				/>
-				<Route path='log-in' element={
-						<LogIn 
-							logIn={logIn}
-							isLoggedIn={isLoggedIn}
-						/>
-					}
-				/>
+				<Route path='sign-up' element={<SignUp isLoggedIn={isLoggedIn} />} />
+				<Route path='log-in' element={<LogIn logIn={logIn} isLoggedIn={isLoggedIn} />} />
 				<Route path='rider' element={<Rider />}>
 				    <Route index element={<RiderDashboard />} />
+				    <Route path='request' element={<RiderRequest/>} />
 				    <Route path=':id' element={<RiderDetail/>} />
 				</Route>
 				<Route path='driver' element={<Driver />}>
@@ -79,13 +73,18 @@ function Layout ({ isLoggedIn, logOut }) {
 					<Navbar.Toggle />
 					<Navbar.Collapse className='justify-content-end'>
 						{
+							isRider() && (
+								<Nav className='me-auto'>
+									<LinkContainer to='/rider/request'>
+										<Nav.Link data-cy='request-trip'>Request a trip</Nav.Link>
+									</LinkContainer>
+								</Nav>
+							)
+						}
+						{
 							isLoggedIn && (
-								<Form>
-									<Button type='button' data-cy='logOut'
-										onClick={() => logOut()}
-									>
-										Log out
-									</Button>
+								<Form className='ms-auto'>
+									<Button type='button' data-cy='logOut' onClick={() => logOut()} >Log out</Button>
 								</Form>
 							)
 						}

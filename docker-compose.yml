@@ -16,7 +16,7 @@ services:
       - PGUSER=taxi
       - PGPASSWORD=taxi
       - PGHOST=taxi-database
-      - REDIS_URL=redis://taxi-redis:6380/0
+      - REDIS_URL=redis://taxi-redis:6379/0
     ports:
       - 8003:8000
     command: python manage.py runserver 0.0.0.0:8000
@@ -24,6 +24,8 @@ services:
   taxi-redis:
     container_name: taxi-redis
     image: redis:7-alpine
+    expose:
+      - 6379
 
   taxi-database:
     container_name: taxi-database
