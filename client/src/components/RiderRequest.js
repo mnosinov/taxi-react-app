@@ -12,9 +12,9 @@ function RiderRequest (props) {
   const onSubmit = (values, actions) => {
     const rider = getUser();
     createTrip({
-      pick_up_address: values.pick_up_address,
-      drop_off_address: values.drop_off_address,
-      rider: rider
+      pick_up_address: values.pickUpAddress,
+      drop_off_address: values.dropOffAddress,
+      rider: rider.id
     });
     setSubmitted(true);
   };

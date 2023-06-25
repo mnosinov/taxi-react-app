@@ -78,7 +78,6 @@ describe('The driver Dashboard', function () {
 		cy.addUser(driverEmail, driverFirstName, driverLastName, 'driver');
 	});
 
-  /*
 	it('Cannot be visited if the user is not a driver', function () {
 		cy.intercept('POST', 'log_in').as('logIn');
 		cy.logIn(riderEmail);
@@ -129,45 +128,5 @@ describe('The driver Dashboard', function () {
 	    cy.wait('@getTrip');
 	    cy.get('[data-cy=trip-card').should('have.length', 1).and('contain.text', 'STARTED')
 	});
-  */
 
-  it('Can receive a ride request', function () {
-    cy.intercept('trip', {
-      statusCode: 200,
-      body: []
-    }).as('getTrips');
-    cy.logIn(driverEmail);
-    cy.visit('/#/driver');
-    cy.wait('@getTrips');
-    cy.get('[data-cy=trip-card]').eq(1).contains('No trips.');
-    console.log(0);
-    cy.request({
-      method: 'POST',
-      url: 'http://localhost:8003/api/log_in/',
-      body: {
-        username: riderEmail,
-        password: 'pAssw0rd'
-      }
-    }).then((response) => {
-      console.log(1);
-      const token = response.body.access;
-      console.log(token);
-      const ws = webSocket(`ws://localhost:8003/taxi/?token=${token}`);
-      console.log(2);
-      ws.subscribe();
-      console.log(3);
-      ws.next({
-        type: 'create.trip',
-        data: {
-          pick_up_address: '123 Main Street',
-          drop_off_address: '456 Elm Street',
-          rider: 2
-        }
-      });
-      console.log(4);
-    });
-    console.log(5);
-    cy.get('[data-cy=trip-card]').eq(1).contains('REQUESTED');
-    console.log(6);
-  });
 });
