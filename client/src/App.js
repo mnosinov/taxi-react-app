@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Container, Nav, Navbar, Button, Form }  from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Link, Outlet, Route, Routes } from 'react-router-dom';
+import { Outlet, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import axios from 'axios';
 
 import Landing from './components/Landing.js';
@@ -16,6 +17,7 @@ import RiderDetail from './components/RiderDetail.js'
 import RiderRequest from './components/RiderRequest.js';
 import { isRider } from './services/AuthService.js';
 
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
 function App() {
@@ -94,6 +96,7 @@ function Layout ({ isLoggedIn, logOut }) {
 			<Container className='pt-3'>
 				<Outlet/>
 			</Container>
+			<ToastContainer />
 		</>
   );
 }

@@ -4,8 +4,8 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { useParams } from 'react-router-dom';
 
 import TripMedia from './TripMedia.js';
-import { getTrip, updateTrip } from '../services/TripService.js';
 import { getUser } from '../services/AuthService.js';
+import { getTrip, updateTrip } from '../services/TripService.js';
 
 const createData = (status) => {
 	switch (status) {
@@ -38,7 +38,7 @@ const createData = (status) => {
 				variant: 'success'
 			};
 	}
-}
+};
 
 function DriverDetail () {
 	const [trip, setTrip] = useState(null);
@@ -78,7 +78,7 @@ function DriverDetail () {
 		tripMedia = (
 			<TripMedia
 				trip={trip}
-				otherGroup='rider'
+				otherGroup = 'rider'
 			/>
 		);
 	}
